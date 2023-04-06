@@ -11,18 +11,9 @@ const Table = () => {
     const startDate = useSelector(store=>store.data.startDate);
     const endDate = useSelector(store => store.data.endDate);
 
-    const handelSortAccToRevenue = (metric) =>{
-        const filtered = filterData.sort((a, b) => { 
-            if(a[metric] < b[metric]){
-                return -1
-            }
-            if(a[metric] > b[metric]){
-                return 1;
-            }
-            return 0;
-        });
-        console.log(filtered);
-        setFilterData(filtered);
+    const handelSort = (metric) =>{
+        console.log(metric);
+        setFilterData([...tableData].sort((a, b) => a[metric] > b[metric] ? 1 : -1));
     }
 
     useEffect(()=>{
@@ -59,7 +50,7 @@ const Table = () => {
         if(tableData.lenght === 0) return<div>Loading..........</div>
         return filterData.map((rowData, index) => {
             return(
-                <tr className='border' key={index}>
+                <tr className='border hover:bg-slate-200' key={index}>
                     {colName.map((col, index)=>(
                         <RenderRow key={index} data={rowData} col={col}/>
                     ))}
@@ -67,21 +58,37 @@ const Table = () => {
             )
         })
     }
+    const filterTable = (e) => {
+        if(e.target.value === "all"){ setFilterData(tableData)}
+        else{
+        const newData =  tableData.filter(ele => ele.app_id === e.target.value);
+        setFilterData(newData);
+        }}
+
     if(!tableData) return <div>Loading.........</div>;
   return (
-    
     <div>
-    <button onClick={() =>handelSortAccToRevenue("clicks")}>Sort</button>
-        <table>
+    <div className='flex items-center p-2 justify-center'>
+    <span>Filter by app name</span>
+    <select onChange={(e)=>filterTable(e)} className='p-2 border ml-2 rounded'>
+        <option value="all">All</option>
+        {
+            apps.map(app => <option value={app.app_id}>{app.app_name}</option>)
+        }
+    </select>
+    </div>
+        { (filterData.length === 0) ? <div>No results found...</div> :
+
+            <table className="shadow-lg">
             <thead>
                 <tr className='border-2 bg-slate-400'>
-                    {colName.map(col => col.isVisible && <td className='font-bold p-2 border-r-2' key={col.order}>{col.Displayname}</td>)}
+                    {colName.map(col => col.isVisible && <td className='font-bold p-2 border-r-2' key={col.order}>{col.Displayname}<button onClick={()=>handelSort(col.name)}>🔽</button></td>)}
                 </tr>
             </thead>
-            <tbody>
+            <tbody className='bg-slate-100'>
                 <RenderTableRows/>
             </tbody>
-        </table>
+        </table>}
     </div>
   )
 }

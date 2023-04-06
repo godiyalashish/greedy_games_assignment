@@ -21,12 +21,12 @@ const DragArea = () => {
     dispatch(changeVisible(id));
   }
   return (
-    <div className="flex gap-x-2 flex-wrap justify-center p-4 border shadow-lg mt-2">
+    <div className="flex gap-x-2 gap-y-2 flex-wrap justify-center p-4 border shadow-lg mt-2">
       {colList.map((col, index) => (
         <div
           draggable
           key={col.name}
-          className={col.isVisible?"p-4 border-2 cursor-move border-gray-600 bg-red-200":"p-4 border-2 border-gray-300"} 
+          className={col.isVisible?"p-4 border-l-4 cursor-move border-l-blue-600 bg-red-200":"p-4 border-l-4 border-gray-300 bg-gray-100"} 
           onDragStart={(e) => {dragItem.current = index}}
           onDragEnter={(e) => {dragOverItem.current = index}}
           onDragEnd={handelSort}
