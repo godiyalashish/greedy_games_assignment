@@ -20,7 +20,7 @@ const App = () =>{
   }
   const showSettings = useSelector(store=>store.settings.isSettingVisible)
   const getApps = async() =>{
-    const data = await fetch('http://go-dev.greedygame.com/v3/dummy/apps');
+    const data = await fetch('https://go-dev.greedygame.com/v3/dummy/apps');
     const json = await data.json();
     dispatch(updateAppData(json.data));
   }
